@@ -1,0 +1,49 @@
+{
+    "name": "ds_storage_ibge_excel",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_storage_stpospucminasdatalake",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "sistema": {
+                "type": "string"
+            },
+            "assunto": {
+                "type": "string"
+            },
+            "nome_arquivo": {
+                "type": "string"
+            },
+            "aba": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "Origem/IBGE"
+        },
+        "annotations": [],
+        "type": "Excel",
+        "typeProperties": {
+            "sheetName": {
+                "value": "@dataset().aba",
+                "type": "Expression"
+            },
+            "location": {
+                "type": "AzureBlobFSLocation",
+                "fileName": {
+                    "value": "@dataset().nome_arquivo",
+                    "type": "Expression"
+                },
+                "folderPath": {
+                    "value": "@concat(dataset().sistema,'/',dataset().assunto)",
+                    "type": "Expression"
+                },
+                "fileSystem": "landing"
+            },
+            "firstRowAsHeader": true
+        },
+        "schema": []
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
