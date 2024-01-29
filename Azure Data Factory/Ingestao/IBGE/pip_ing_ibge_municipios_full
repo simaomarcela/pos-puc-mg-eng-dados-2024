@@ -1,0 +1,576 @@
+{
+    "name": "pip_ing_ibge_municipios_full",
+    "properties": {
+        "activities": [
+            {
+                "name": "IBGE Municipios",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "ExcelSource",
+                        "storeSettings": {
+                            "type": "AzureBlobFSReadSettings",
+                            "recursive": true,
+                            "enablePartitionDiscovery": false
+                        }
+                    },
+                    "sink": {
+                        "type": "ParquetSink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings"
+                        },
+                        "formatSettings": {
+                            "type": "ParquetWriteSettings"
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "name": "UF",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "uf",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome_UF",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_uf",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Região Geográfica Intermediária",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "regiao_geografica_intermediaria",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome Região Geográfica Intermediária",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_regiao_geografica_intermediaria",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Região Geográfica Imediata",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "regiao_geografica_imediata",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome Região Geográfica Imediata",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_regiao_geografica_imediata",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Mesorregião Geográfica",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "mesorregiao_geografica",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome_Mesorregião",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_mesorregiao",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Microrregião Geográfica",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "microrregiao_geografica",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome_Microrregião",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_microrregiao",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Município",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "municipio",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Código Município Completo",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "codigo_municipio_completo",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome_Município",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_municipio",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Distrito",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "distrito",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Código de Distrito Completo",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "codigo_distrito_completo",
+                                    "physicalType": "UTF8"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "Nome_Distrito",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                },
+                                "sink": {
+                                    "name": "nome_distrito",
+                                    "physicalType": "UTF8"
+                                }
+                            }
+                        ],
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "ds_storage_ibge_excel",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "sistema": {
+                                "value": "@pipeline().parameters.origem",
+                                "type": "Expression"
+                            },
+                            "assunto": {
+                                "value": "@pipeline().parameters.assunto",
+                                "type": "Expression"
+                            },
+                            "nome_arquivo": {
+                                "value": "@pipeline().parameters.nome_arquivo",
+                                "type": "Expression"
+                            },
+                            "aba": {
+                                "value": "@pipeline().parameters.aba",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "ds_storage_datalake_parquet",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "camada": "bronze",
+                            "origem": {
+                                "value": "@pipeline().parameters.origem",
+                                "type": "Expression"
+                            },
+                            "assunto": {
+                                "value": "@pipeline().parameters.assunto",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Processa Controle de carga",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Aguarda execucao",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_controle_carga",
+                    "baseParameters": {
+                        "data_factory_name": {
+                            "value": "@pipeline().DataFactory",
+                            "type": "Expression"
+                        },
+                        "pipeline_name": {
+                            "value": "@pipeline().Pipeline",
+                            "type": "Expression"
+                        },
+                        "pip_grp_id": {
+                            "value": "@pipeline().GroupId",
+                            "type": "Expression"
+                        },
+                        "pip_run_id": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_id": {
+                            "value": "@pipeline().TriggerId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_name": {
+                            "value": "@pipeline().TriggerName",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_time": {
+                            "value": "@convertTimeZone(pipeline().TriggerTime, 'UTC','E. South America Standard Time')",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_type": {
+                            "value": "@pipeline().TriggerType",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_read": {
+                            "value": "@string(activity('IBGE Municipios').output.rowsRead)",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_copied": {
+                            "value": "@string(activity('IBGE Municipios').output.rowsCopied)",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_duration": {
+                            "value": "@string(activity('IBGE Municipios').output.copyDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_start": {
+                            "value": "@activity('IBGE Municipios').output.executionDetails[0].start",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_status": {
+                            "value": "@activity('IBGE Municipios').output.executionDetails[0].status",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_dius": {
+                            "value": "@string(activity('IBGE Municipios').output.executionDetails[0].usedDataIntegrationUnits)",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_parallel": {
+                            "value": "@string(activity('IBGE Municipios').output.executionDetails[0].usedParallelCopies)",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_source": {
+                            "value": "@string(activity('IBGE Municipios').output.executionDetails[0].source.type)",
+                            "type": "Expression"
+                        },
+                        "pip_modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        },
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_bronze": {
+                            "value": "@string(activity('Processa Camada Bronze').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_silver": {
+                            "value": "@string(activity('Processa Camada Silver').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_gold": {
+                            "value": "@string(activity('Processa Camada Gold').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "tabela": {
+                            "value": "@concat('tb_',pipeline().parameters.origem,'_',pipeline().parameters.assunto)",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Bronze",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "IBGE Municipios",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "bronze",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Silver",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "silver",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Gold",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "gold",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Aguarda execucao",
+                "type": "Wait",
+                "dependsOn": [
+                    {
+                        "activity": "IBGE Municipios",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Gold",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "waitTimeInSeconds": 1
+                }
+            }
+        ],
+        "parameters": {
+            "origem": {
+                "type": "string",
+                "defaultValue": "ibge"
+            },
+            "assunto": {
+                "type": "string",
+                "defaultValue": "municipios"
+            },
+            "nome_arquivo": {
+                "type": "string",
+                "defaultValue": "RELATORIO_DTB_BRASIL_DISTRITO.xls"
+            },
+            "aba": {
+                "type": "string",
+                "defaultValue": "DTB_2022_Distrito"
+            },
+            "modo": {
+                "type": "string",
+                "defaultValue": "full"
+            }
+        },
+        "folder": {
+            "name": "Ingestao/IBGE"
+        },
+        "annotations": [],
+        "lastPublishTime": "2024-01-21T18:54:04Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
