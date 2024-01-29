@@ -1,0 +1,41 @@
+{
+    "name": "ds_storage_datalake_parquet",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_storage_stpospucminasdatalake",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "camada": {
+                "type": "string"
+            },
+            "origem": {
+                "type": "string"
+            },
+            "assunto": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "Destino/Datalake"
+        },
+        "annotations": [],
+        "type": "Parquet",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobFSLocation",
+                "folderPath": {
+                    "value": "@concat(dataset().origem,'/',dataset().assunto)",
+                    "type": "Expression"
+                },
+                "fileSystem": {
+                    "value": "@dataset().camada",
+                    "type": "Expression"
+                }
+            },
+            "compressionCodec": "snappy"
+        },
+        "schema": []
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
