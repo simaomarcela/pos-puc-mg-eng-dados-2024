@@ -1,0 +1,13 @@
+{
+    "name": "ls_http_portal_transparencia",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "HttpServer",
+        "typeProperties": {
+            "url": "https://portaldatransparencia.gov.br/download-de-dados/",
+            "enableServerCertificateValidation": true,
+            "authenticationType": "Anonymous"
+        }
+    }
+}
