@@ -1,0 +1,618 @@
+{
+    "name": "pip_ing_portal_transparencia_bolsa_fam_pgto_full",
+    "properties": {
+        "activities": [
+            {
+                "name": "Processa Controle de carga",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Aguarda execucao",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_controle_carga",
+                    "baseParameters": {
+                        "data_factory_name": {
+                            "value": "@pipeline().DataFactory",
+                            "type": "Expression"
+                        },
+                        "pipeline_name": {
+                            "value": "@pipeline().Pipeline",
+                            "type": "Expression"
+                        },
+                        "pip_grp_id": {
+                            "value": "@pipeline().GroupId",
+                            "type": "Expression"
+                        },
+                        "pip_run_id": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_id": {
+                            "value": "@pipeline().TriggerId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_name": {
+                            "value": "@pipeline().TriggerName",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_time": {
+                            "value": "@convertTimeZone(pipeline().TriggerTime, 'UTC','E. South America Standard Time')",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_type": {
+                            "value": "@pipeline().TriggerType",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_read": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_copied": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_duration": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_start": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_status": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_dius": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_parallel": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_source": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        },
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_bronze": {
+                            "value": "@string(activity('Processa Camada Bronze').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_silver": {
+                            "value": "@string(activity('Processa Camada Silver').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_gold": {
+                            "value": "@string(activity('Processa Camada Gold').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "tabela": {
+                            "value": "@concat('tb_',pipeline().parameters.origem,'_',pipeline().parameters.assunto)",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Bronze",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Recupera anos",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "bronze",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Silver",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "silver",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Gold",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "gold",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Aguarda execucao",
+                "type": "Wait",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Gold",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Recupera anos",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "waitTimeInSeconds": 1
+                }
+            },
+            {
+                "name": "Recupera anos",
+                "description": "Novembro 2021 a Fevereiro 2023",
+                "type": "ForEach",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@variables('anos')",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "Portal Transparencia - Bolsa Familia Pagamentos",
+                            "type": "Copy",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "source": {
+                                    "type": "DelimitedTextSource",
+                                    "storeSettings": {
+                                        "type": "HttpReadSettings",
+                                        "requestMethod": "GET"
+                                    },
+                                    "formatSettings": {
+                                        "type": "DelimitedTextReadSettings",
+                                        "compressionProperties": {
+                                            "type": "ZipDeflateReadSettings",
+                                            "preserveZipFileNameAsFolder": false
+                                        }
+                                    }
+                                },
+                                "sink": {
+                                    "type": "ParquetSink",
+                                    "storeSettings": {
+                                        "type": "AzureBlobFSWriteSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "ParquetWriteSettings"
+                                    }
+                                },
+                                "enableStaging": false,
+                                "translator": {
+                                    "type": "TabularTranslator",
+                                    "mappings": [
+                                        {
+                                            "source": {
+                                                "name": "MÊS COMPETÊNCIA",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "MES_COMPETENCIA",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "MÊS REFERÊNCIA",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "MES_REFERENCIA",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "UF",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "UF",
+                                                "type": "String",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "CÓDIGO MUNICÍPIO SIAFI",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "CODIGO_MUNICIPIO_SIAFI",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "NOME MUNICÍPIO",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "NOME_MUNICIPIO",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "CPF FAVORECIDO",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "CPF_FAVORECIDO",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "NIS FAVORECIDO",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "NIS_FAVORECIDO",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "NOME FAVORECIDO",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "NOME_FAVORECIDO",
+                                                "physicalType": "UTF8"
+                                            }
+                                        },
+                                        {
+                                            "source": {
+                                                "name": "VALOR PARCELA",
+                                                "type": "String",
+                                                "physicalType": "String"
+                                            },
+                                            "sink": {
+                                                "name": "VALOR_PARCELA",
+                                                "physicalType": "UTF8"
+                                            }
+                                        }
+                                    ],
+                                    "typeConversion": true,
+                                    "typeConversionSettings": {
+                                        "allowDataTruncation": true,
+                                        "treatBooleanAsNumber": false
+                                    }
+                                }
+                            },
+                            "inputs": [
+                                {
+                                    "referenceName": "ds_csv_portal_transparencia",
+                                    "type": "DatasetReference",
+                                    "parameters": {
+                                        "assunto": {
+                                            "value": "@pipeline().parameters.assunto",
+                                            "type": "Expression"
+                                        },
+                                        "ano": {
+                                            "value": "@item()",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ],
+                            "outputs": [
+                                {
+                                    "referenceName": "ds_storage_datalake_parquet",
+                                    "type": "DatasetReference",
+                                    "parameters": {
+                                        "camada": "bronze",
+                                        "origem": {
+                                            "value": "@pipeline().parameters.origem",
+                                            "type": "Expression"
+                                        },
+                                        "assunto": {
+                                            "value": "@pipeline().parameters.assunto",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "origem": {
+                "type": "string",
+                "defaultValue": "portal_transparencia"
+            },
+            "assunto": {
+                "type": "string",
+                "defaultValue": "bolsa_familia_pagamentos"
+            },
+            "modo": {
+                "type": "string",
+                "defaultValue": "full"
+            }
+        },
+        "variables": {
+            "anos": {
+                "type": "Array",
+                "defaultValue": [
+                    201301,
+                    201302,
+                    201303,
+                    201304,
+                    201305,
+                    201306,
+                    201307,
+                    201308,
+                    201309,
+                    201310,
+                    201311,
+                    201312,
+                    201401,
+                    201402,
+                    201403,
+                    201404,
+                    201405,
+                    201406,
+                    201407,
+                    201408,
+                    201409,
+                    201410,
+                    201411,
+                    201412,
+                    201501,
+                    201502,
+                    201503,
+                    201504,
+                    201505,
+                    201506,
+                    201507,
+                    201508,
+                    201509,
+                    201510,
+                    201511,
+                    201512,
+                    201601,
+                    201602,
+                    201603,
+                    201604,
+                    201605,
+                    201606,
+                    201607,
+                    201608,
+                    201609,
+                    201610,
+                    201611,
+                    201612,
+                    201701,
+                    201702,
+                    201703,
+                    201704,
+                    201705,
+                    201706,
+                    201707,
+                    201708,
+                    201709,
+                    201710,
+                    201711,
+                    201712,
+                    201801,
+                    201802,
+                    201803,
+                    201804,
+                    201805,
+                    201806,
+                    201807,
+                    201808,
+                    201809,
+                    201810,
+                    201811,
+                    201812,
+                    201901,
+                    201902,
+                    201903,
+                    201904,
+                    201905,
+                    201906,
+                    201907,
+                    201908,
+                    201909,
+                    201910,
+                    201911,
+                    201912,
+                    202001,
+                    202002,
+                    202003,
+                    202004,
+                    202005,
+                    202006,
+                    202007,
+                    202008,
+                    202009,
+                    202010,
+                    202011,
+                    202012,
+                    202101,
+                    202102,
+                    202103,
+                    202104,
+                    202105,
+                    202106,
+                    202107,
+                    202108,
+                    202109
+                ]
+            }
+        },
+        "folder": {
+            "name": "Ingestao/Portal Transparencia"
+        },
+        "annotations": [],
+        "lastPublishTime": "2024-01-21T21:48:52Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
