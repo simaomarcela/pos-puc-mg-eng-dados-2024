@@ -1,0 +1,39 @@
+{
+    "name": "ds_csv_portal_transparencia",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_http_portal_transparencia",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "assunto": {
+                "type": "string"
+            },
+            "ano": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "Origem/Portal Transparencia"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+            "location": {
+                "type": "HttpServerLocation",
+                "relativeUrl": {
+                    "value": "@concat(replace(dataset().assunto,'_','-'),'/',dataset().ano)",
+                    "type": "Expression"
+                }
+            },
+            "columnDelimiter": ";",
+            "compressionCodec": "ZipDeflate",
+            "encodingName": "WINDOWS-1252",
+            "escapeChar": "\\",
+            "firstRowAsHeader": true,
+            "quoteChar": "\""
+        },
+        "schema": []
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
