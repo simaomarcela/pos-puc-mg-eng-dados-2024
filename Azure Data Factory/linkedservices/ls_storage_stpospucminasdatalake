@@ -1,0 +1,11 @@
+{
+    "name": "ls_storage_stpospucminasdatalake",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "AzureBlobFS",
+        "typeProperties": {
+            "url": "https://stpospucmgdatalake.dfs.core.windows.net/"
+        }
+    }
+}
