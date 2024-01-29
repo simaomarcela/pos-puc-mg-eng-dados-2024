@@ -1,0 +1,13 @@
+{
+    "name": "ls_http_govbr_cadunico",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "HttpServer",
+        "typeProperties": {
+            "url": "https://aplicacoes.mds.gov.br/sagi/servicos/misocial/",
+            "enableServerCertificateValidation": true,
+            "authenticationType": "Anonymous"
+        }
+    }
+}
