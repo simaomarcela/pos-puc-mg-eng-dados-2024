@@ -1,1 +1,420 @@
-
+{
+    "name": "pip_ing_govbr_cadunico_faixarenda_full",
+    "properties": {
+        "activities": [
+            {
+                "name": "Processa Controle de carga",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Aguarda execucao",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_controle_carga",
+                    "baseParameters": {
+                        "data_factory_name": {
+                            "value": "@pipeline().DataFactory",
+                            "type": "Expression"
+                        },
+                        "pipeline_name": {
+                            "value": "@pipeline().Pipeline",
+                            "type": "Expression"
+                        },
+                        "pip_grp_id": {
+                            "value": "@pipeline().GroupId",
+                            "type": "Expression"
+                        },
+                        "pip_run_id": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_id": {
+                            "value": "@pipeline().TriggerId",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_name": {
+                            "value": "@pipeline().TriggerName",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_time": {
+                            "value": "@convertTimeZone(pipeline().TriggerTime, 'UTC','E. South America Standard Time')",
+                            "type": "Expression"
+                        },
+                        "pip_trigger_type": {
+                            "value": "@pipeline().TriggerType",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_read": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_row_copied": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_duration": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_start": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_status": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_dius": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_exc_parallel": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_cpy_source": {
+                            "value": "''",
+                            "type": "Expression"
+                        },
+                        "pip_modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        },
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_bronze": {
+                            "value": "@string(activity('Processa Camada Bronze').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_silver": {
+                            "value": "@string(activity('Processa Camada Silver').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "pip_nt_exe_gold": {
+                            "value": "@string(activity('Processa Camada Gold').output.executionDuration)",
+                            "type": "Expression"
+                        },
+                        "tabela": {
+                            "value": "@concat('tb_',pipeline().parameters.origem,'_',pipeline().parameters.assunto)",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Bronze",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Recupera anos",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "bronze",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Silver",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "silver",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Processa Camada Gold",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Controle Carga/nt_py_tabela_controle",
+                    "baseParameters": {
+                        "assunto": {
+                            "value": "@pipeline().parameters.assunto",
+                            "type": "Expression"
+                        },
+                        "camada": "gold",
+                        "modo": {
+                            "value": "@pipeline().parameters.modo",
+                            "type": "Expression"
+                        },
+                        "origem": {
+                            "value": "@pipeline().parameters.origem",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_databricks_clusterdefault",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Aguarda execucao",
+                "type": "Wait",
+                "dependsOn": [
+                    {
+                        "activity": "Processa Camada Bronze",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Gold",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Processa Camada Silver",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "Recupera anos",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "waitTimeInSeconds": 1
+                }
+            },
+            {
+                "name": "Recupera anos",
+                "description": "2015 a 2023",
+                "type": "ForEach",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@variables('anos')",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "GOV BR - Cad Unico Faixa Renda",
+                            "type": "Copy",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "source": {
+                                    "type": "DelimitedTextSource",
+                                    "storeSettings": {
+                                        "type": "HttpReadSettings",
+                                        "requestMethod": "GET"
+                                    },
+                                    "formatSettings": {
+                                        "type": "DelimitedTextReadSettings"
+                                    }
+                                },
+                                "sink": {
+                                    "type": "ParquetSink",
+                                    "storeSettings": {
+                                        "type": "AzureBlobFSWriteSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "ParquetWriteSettings"
+                                    }
+                                },
+                                "enableStaging": false,
+                                "translator": {
+                                    "type": "TabularTranslator",
+                                    "typeConversion": true,
+                                    "typeConversionSettings": {
+                                        "allowDataTruncation": true,
+                                        "treatBooleanAsNumber": false
+                                    }
+                                }
+                            },
+                            "inputs": [
+                                {
+                                    "referenceName": "ds_csv_govbr_cad_unico",
+                                    "type": "DatasetReference",
+                                    "parameters": {
+                                        "ano": {
+                                            "value": "@item()",
+                                            "type": "Expression"
+                                        },
+                                        "url": {
+                                            "value": "@pipeline().parameters.url",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ],
+                            "outputs": [
+                                {
+                                    "referenceName": "ds_storage_datalake_parquet",
+                                    "type": "DatasetReference",
+                                    "parameters": {
+                                        "camada": "bronze",
+                                        "origem": {
+                                            "value": "@pipeline().parameters.origem",
+                                            "type": "Expression"
+                                        },
+                                        "assunto": {
+                                            "value": "@pipeline().parameters.assunto",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "origem": {
+                "type": "string",
+                "defaultValue": "cad_unico"
+            },
+            "assunto": {
+                "type": "string",
+                "defaultValue": "faixa_renda"
+            },
+            "modo": {
+                "type": "string",
+                "defaultValue": "full"
+            },
+            "url": {
+                "type": "string",
+                "defaultValue": "?fl=codigo_ibge%2Canomes_s%20cadun_qtd_familias_atualizadas_i%20cadun_qtd_familias_atualizadas_pobreza_pbf_i%20cadun_qtd_familias_atualizadas_baixa_renda_i%20cadun_qtd_familias_atualizadas_rfpc_ate_meio_sm_i%20cadun_qtd_familias_atualizadas_rfpc_acima_meio_sm_i%20cadun_qtd_familias_atualizadas_renda_zero_i%20cadun_taxa_atualizacao_cadastral_d%20cadun_taxa_atualizacao_cadastral_rfpc_ate_meio_sm_d&fq=cadun_qtd_familias_cadastradas_i%3A*&q=*%3A*&rows=100000&sort=anomes_s%20desc%2C%20codigo_ibge%20asc&wt=csv&fq=anomes_s:"
+            }
+        },
+        "variables": {
+            "anos": {
+                "type": "Array",
+                "defaultValue": [
+                    2015,
+                    2016,
+                    2017,
+                    2018,
+                    2019,
+                    2020,
+                    2021,
+                    2022,
+                    2023
+                ]
+            }
+        },
+        "folder": {
+            "name": "Ingestao/GOVBR/Cadastro Unico"
+        },
+        "annotations": [],
+        "lastPublishTime": "2024-01-21T20:09:07Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
